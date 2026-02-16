@@ -1,0 +1,63 @@
+{% extends 'base.html'%}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container mt-5">
+   <h2 class="mb-4">Add New Task</h2>
+
+    <!-- Display Django messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Title field -->
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Title</label>
+            {% render_field form.title class="form-control" placeholder="Enter task title" %}
+            {% if form.title.errors %}
+                <div class="text-danger small">
+                    {{ form.title.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Description field -->
+        <div class="mb-3">
+            <label for="id_description" class="form-label">Description</label>
+            {% render_field form.description class="form-control" rows="4" placeholder="Enter task description" %}
+            {% if form.description.errors %}
+                <div class="text-danger small">
+                    {{ form.description.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Status checkbox -->
+        <div class="mb-3 form-check">
+            {% render_field form.status class="form-check-input" %}
+            <label class="form-check-label" for="id_status">Completed</label>
+            {% if form.status.errors %}
+                <div class="text-danger small">
+                    {{ form.status.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Buttons -->
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-circle"></i> Save Task
+        </button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}

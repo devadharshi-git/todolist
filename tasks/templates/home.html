@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold">👋 Hi, {{ user.username }}</a>
+    <div class="d-flex">
+      <a href="{% url 'add_task' %}" class="btn btn-success me-2">
+        <i class="bi bi-plus-circle"></i> Add Task
+      </a>
+      <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<!-- Task Grid -->
+<div class="container">
+  <div class="row">
+    {% for task in tasks %}
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white fw-bold">
+            {{ task.title }}
+          </div>
+          <div class="card-body">
+            <p class="card-text">{{ task.description }}</p>
+            {% if task.status %}
+              <span class="badge bg-success">Completed</span>
+            {% else %}
+              <span class="badge bg-warning text-dark">Pending</span>
+            {% endif %}
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-pencil-square"></i> Edit
+            </a>
+             <a href="{% url 'delete_task' task.id %}" class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-pencil-square"></i> Delete
+            </a>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center mt-5">
+        <h4 class="text-muted">No tasks yet. Start by adding one!</h4>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
